@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://lheberlie.github.io/blog/2014/08/15/reducing-the-web-optimizer-output/</loc>
+    <lastmod>2014-08-15T16:07:51-05:00</lastmod>
+  </url>
+  <url>
+    <loc>http://lheberlie.github.io/blog/2014/07/31/hello-octopress/</loc>
+    <lastmod>2014-07-31T18:37:24-05:00</lastmod>
+  </url>
+  <url>
+    <loc>http://lheberlie.github.io/blog/archives/</loc>
+  </url>
+  <url>
+    <loc>http://lheberlie.github.io/</loc>
+  </url>
+  <url>
+    <loc>http://lheberlie.github.io/blog/categories/setup-install/</loc>
+  </url>
+  <url>
+    <loc>http://lheberlie.github.io/blog/categories/web-optimization/</loc>
+  </url>
+</urlset>

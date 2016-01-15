@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Web_optimization | Lloyd Heberlie]]></title>
+  <link href="http://lheberlie.github.io/blog/categories/web-optimization/atom.xml" rel="self"/>
+  <link href="http://lheberlie.github.io/"/>
+  <updated>2016-01-15T16:32:49-06:00</updated>
+  <id>http://lheberlie.github.io/</id>
+  <author>
+    <name><![CDATA[Lloyd Heberlie]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Reducing the Web Optimizer Output]]></title>
+    <link href="http://lheberlie.github.io/blog/2014/08/15/reducing-the-web-optimizer-output/"/>
+    <updated>2014-08-15T16:07:51-05:00</updated>
+    <id>http://lheberlie.github.io/blog/2014/08/15/reducing-the-web-optimizer-output</id>
+    <content type="html"><![CDATA[<h3>Background</h3>
+
+<p>The current configuration of the <a href="http://jso.arcgis.com">Esri ArcGIS API for JavaScript Web Optimizer</a> build system errors on the side of caution and leaves in a lot of content from the library just in case you might need it.  However, you can trim down the size considerably but you need to be responsible moving forward. There may be cases where you end up removing stylesheets or stylesheet assets such as images that you might have to put back into place. You may also want to remove unused locales, which is possible.</p>
+
+<p>In this post, we&rsquo;ll take a look at manually reducing the size of a custom API build from the Web Optimizer with a little help from a Grunt task.  The important thing to remember here is that we may be removing assets needed by our application, so it is important to always test the application for 404 errors (file not found) so you can determine which files need to be left in the build.</p>
+
+<h3>Resources</h3>
+
+<p>You can get all the code from the <a href="https://github.com/lheberlie/grunt-optimizer-cleanup">grunt-optimizer-cleanup</a> repository. It is assumed that you have <strong>Node.js</strong>, and <strong>Grunt.js</strong> configured on your machine if you want to use the Grunt automation to reduce the Web Optimizer output. FYI, you don&rsquo;t have to use Grunt. This process can be a manual task.</p>
+
+<h3>Getting started</h3>
+
+<p><strong>Use the Web Optimizer</strong></p>
+
+<p>You will need to use the Web Optimizer to create a custom build of the ArcGIS API for JavaScript. If you have never completed this task before, you might want to read the <a href="http://jso.arcgis.com/help">Web Optimizer help</a>.</p>
+
+<p>The following instructions assume the &ldquo;Only include built layer files and resources&rdquo; option was checked (see graphic below) when generating a build.</p>
+
+<p><img src="/blog/images/web-optimization/web-opt-adv-opt.png" alt="image" /></p>
+
+<h3>The instructions below will delete unused Dojo and Esri resources</h3>
+
+<p><strong>Deleting files manually</strong></p>
+
+<ol>
+<li>Download and unzip your build (ex. <code>3.9custom</code>).</li>
+<li>Delete the dijit and dojox folders.</li>
+<li>Inside the esri folder, delete the toolbars folder.</li>
+<li>Inside esri/dijit, delete everything except the images folder.</li>
+</ol>
+
+
+<p><img src="/blog/images/web-optimization/web-opt-remove-folders.png" alt="image" /></p>
+
+<p><strong>Deleting files using the Grunt task</strong></p>
+
+<p>Copy the Grunt project from the GitHub repo</p>
+
+<p><figure class='code'><figcaption><span>clone the repo </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>your_working_directory<span class="nv">$ </span>git clone &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;https://github.com/lheberlie/grunt-optimizer-cleanup&quot;</span>&gt;https://github.com/lheberlie/grunt-optimizer-cleanup&lt;/a&gt;
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>Install the node modules (requires Node.js and the Grunt grunt-cli installed)</p>
+
+<p><figure class='code'><figcaption><span>Install the node modules </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">cd</span> ./grunt-optimizer-cleanup
+</span><span class='line'>npm install
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>Create the <code>library-before</code> directory and copy your custom library (<code>3.9custom</code>) into the <code>library-before</code> folder</p>
+
+<p><figure class='code'><figcaption><span>Install the node modules </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>/Users/Stan/your_working_directory/grunt-optimizer-cleanup
+</span><span class='line'>   <span class="p">|</span>-Gruntfile.js
+</span><span class='line'>   <span class="p">|</span>-README.md
+</span><span class='line'>   <span class="p">|</span>-extract-urls-from-css.txt
+</span><span class='line'>   <span class="p">|</span>-extract-urls.py
+</span><span class='line'>   <span class="p">|</span>-library-after
+</span><span class='line'>   <span class="p">|</span>-library-before
+</span><span class='line'>   <span class="p">|</span>-license.txt
+</span><span class='line'>   <span class="p">|</span>-node_modules
+</span><span class='line'>   <span class="p">|</span>-package.json
+</span><span class='line'>   <span class="p">|</span>-size-report-example.txt
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>A note about one of the other files:</p>
+
+<ul>
+<li><strong>extract-urls.py</strong> can pull out the urls used in a stylesheet.
+
+<ul>
+<li><code>background:     repeat left top url("../images/map/70-percent-white.png");</code></li>
+</ul>
+</li>
+</ul>
+
+
+<p>The Grunt task will run the following targets:</p>
+
+<p><figure class='code'><figcaption><span>default task </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="k">default</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span> <span class="p">[</span>
+</span><span class='line'>        <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">clean</span><span class="o">:</span><span class="nx">library_after</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>        <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">copy</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>        <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">clean</span><span class="o">:</span><span class="nx">dijit_dojox_extras</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>        <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">clean</span><span class="o">:</span><span class="nx">esri_toolbars</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>        <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">clean</span><span class="o">:</span><span class="nx">esri_dijit</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>        <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">clean</span><span class="o">:</span><span class="nx">nls</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>        <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">size_report</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">]);</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>The following <strong>default target</strong> (listed above) will clean out the <code>library-after</code> folder, copy the original Web Optimizer output folder from the <code>library-before</code> folder and put it into the <code>library-after</code> folder, then run a series of <code>clean</code> targets that will delete the files that would have been complete during a manual process.  The final <code>size_report</code> target will list the differences of before and after directory comparison.</p>
+
+<p><figure class='code'><figcaption><span>dijit folder </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>dijit<span class="nv">$ </span>find . -type f <span class="p">|</span> wc -l
+</span><span class='line'>     512
+</span><span class='line'>dijit<span class="nv">$ </span>du -h
+</span><span class='line'> 72K    ./icons/images
+</span><span class='line'> 92K    ./icons
+</span><span class='line'> 16K    ./themes/a11y
+</span><span class='line'> 40K    ./themes/claro/form/images
+</span><span class='line'>168K    ./themes/claro/form
+</span><span class='line'> 84K    ./themes/claro/images
+</span><span class='line'> 72K    ./themes/claro/layout/images
+</span><span class='line'>144K    ./themes/claro/layout
+</span><span class='line'>776K    ./themes/claro
+</span><span class='line'> 36K    ./themes/nihilo/form
+</span><span class='line'>276K    ./themes/nihilo/images
+</span><span class='line'> 36K    ./themes/nihilo/layout
+</span><span class='line'>512K    ./themes/nihilo
+</span><span class='line'> 36K    ./themes/soria/form
+</span><span class='line'>300K    ./themes/soria/images
+</span><span class='line'> 32K    ./themes/soria/layout
+</span><span class='line'>528K    ./themes/soria
+</span><span class='line'> 28K    ./themes/tundra/form
+</span><span class='line'>524K    ./themes/tundra/images
+</span><span class='line'> 28K    ./themes/tundra/layout
+</span><span class='line'>744K    ./themes/tundra
+</span><span class='line'>2.6M    ./themes
+</span><span class='line'>2.7M    .
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><figure class='code'><figcaption><span>dojox folder </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>dojox<span class="nv">$ </span>find . -type f <span class="p">|</span> wc -l
+</span><span class='line'>       7
+</span><span class='line'>dojox<span class="nv">$ </span>du -h               &lt;br/&gt;
+</span><span class='line'>116K    ./gfx/resources
+</span><span class='line'>116K    ./gfx
+</span><span class='line'>4.0K    ./html/resources
+</span><span class='line'>4.0K    ./html
+</span><span class='line'>132K    .
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><figure class='code'><figcaption><span>esri/toolbars folder </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>toolbars<span class="nv">$ </span>find . -type f <span class="p">|</span> wc -l
+</span><span class='line'>       2
+</span><span class='line'>toolbars<span class="nv">$ </span>du -h               &lt;br/&gt;
+</span><span class='line'>4.0K    ./css
+</span><span class='line'>4.0K    ./images
+</span><span class='line'>8.0K    .
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><figure class='code'><figcaption><span>esri/dijit folder (including the images folder) </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>dijit<span class="nv">$ </span>find . -type f <span class="p">|</span> wc -l
+</span><span class='line'>     411
+</span><span class='line'>dijit<span class="nv">$ </span>du -h            &lt;br/&gt;
+</span><span class='line'> 60K    ./analysis/css
+</span><span class='line'>320K    ./analysis/images
+</span><span class='line'>380K    ./analysis
+</span><span class='line'>148K    ./css
+</span><span class='line'> 12K    ./editing/css
+</span><span class='line'>8.0K    ./editing/images
+</span><span class='line'> 20K    ./editing
+</span><span class='line'>4.0K    ./GeocodeMatch/css
+</span><span class='line'> 20K    ./GeocodeMatch/images
+</span><span class='line'> 24K    ./GeocodeMatch
+</span><span class='line'>4.0K    ./GeocodeReview/css
+</span><span class='line'> 16K    ./GeocodeReview/images
+</span><span class='line'> 20K    ./GeocodeReview
+</span><span class='line'>804K    ./geoenrichment/images
+</span><span class='line'> 72K    ./geoenrichment/themes/common/images/dataCollections
+</span><span class='line'>312K    ./geoenrichment/themes/common/images
+</span><span class='line'>404K    ./geoenrichment/themes/common
+</span><span class='line'>332K    ./geoenrichment/themes/light/images
+</span><span class='line'>364K    ./geoenrichment/themes/light
+</span><span class='line'>768K    ./geoenrichment/themes
+</span><span class='line'>1.5M    ./geoenrichment
+</span><span class='line'> 32K    ./images/basemaps
+</span><span class='line'>136K    ./images/Directions/maneuvers
+</span><span class='line'>188K    ./images/Directions
+</span><span class='line'> 52K    ./images/HistogramTimeSlider
+</span><span class='line'> 60K    ./images/popup-sprite
+</span><span class='line'>1.1M    ./images
+</span><span class='line'>3.2M    .
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><figure class='code'><figcaption><span>dojo/nls folder </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>nls<span class="nv">$ </span>find . -type f <span class="p">|</span> wc -l
+</span><span class='line'>      32
+</span><span class='line'>nls<span class="nv">$ </span>du -h         &lt;br/&gt;
+</span><span class='line'>2.2M    .
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><strong>Overall report comparing the two directories</strong></p>
+
+<p><figure class='code'><figcaption><span>Report </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;Running <span class="p">&amp;</span>ldquo<span class="p">;</span>size_report:before<span class="p">&amp;</span>rdquo<span class="p">;</span> <span class="o">(</span>size_report<span class="o">)</span> task&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;Size report
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h2&gt;Filename                                                                                   Size          %&lt;/h2&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;library-before/3.9custom/dojo/dojo.js                                                     0.8 MiB    11.2%
+</span><span class='line'><span class="p">&amp;</span>hellip<span class="p">;&amp;</span>hellip<span class="p">;&amp;</span>hellip<span class="p">;</span>.
+</span><span class='line'><span class="p">&amp;</span>hellip<span class="p">;&amp;</span>hellip<span class="p">;&amp;</span>hellip<span class="p">;</span>.
+</span><span class='line'><span class="p">&amp;</span>hellip<span class="p">;&amp;</span>hellip<span class="p">;&amp;</span>hellip<span class="p">;</span>.
+</span><span class='line'>library-before/3.9custom/dijit/themes/nihilo/form/TimeTextBox.css                          <span class="m">17</span> B       0.0%&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;library-before/3.9custom/esri/dijit/editing/css/attachment.css                              <span class="m">0</span> B       0.0%&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;Total:                                                                                    7.0 MiB&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;Running <span class="p">&amp;</span>ldquo<span class="p">;</span>size_report:after<span class="p">&amp;</span>rdquo<span class="p">;</span> <span class="o">(</span>size_report<span class="o">)</span> task&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;Size report
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h2&gt;Filename                                                                                   Size          %&lt;/h2&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;library-after/3.9custom/dojo/dojo.js                                                      0.8 MiB    33.7%
+</span><span class='line'><span class="p">&amp;</span>hellip<span class="p">;&amp;</span>hellip<span class="p">;&amp;</span>hellip<span class="p">;</span>.
+</span><span class='line'><span class="p">&amp;</span>hellip<span class="p">;&amp;</span>hellip<span class="p">;&amp;</span>hellip<span class="p">;</span>.
+</span><span class='line'><span class="p">&amp;</span>hellip<span class="p">;&amp;</span>hellip<span class="p">;&amp;</span>hellip<span class="p">;</span>.
+</span><span class='line'>library-after/3.9custom/esri/dijit/images/transparent.gif                                  <span class="m">45</span> B       0.0%&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;library-after/3.9custom/dojo/resources/blank.gif                                           <span class="m">43</span> B       0.0%&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;Total:                                                                                    2.3 MiB&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3>What&rsquo;s next?</h3>
+
+<p>There are approximately 133 files in the <code>esri/dijit/images</code> folder which add up to about <code>1.1 MB</code> on disk. We removed 278 files, roughly about <code>2.1 MB</code>.</p>
+
+<p><figure class='code'><figcaption><span>Number of files in (esri/dijit/images) </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">cd</span> /Users/Stan/your_working_directory/grunt-optimizer-cleanup/library-after/3.9custom/esri/dijit/images&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;images<span class="nv">$ </span>find . -type f <span class="p">|</span> wc -l
+</span><span class='line'>     133&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;images<span class="nv">$ </span> du -h
+</span><span class='line'>32K    ./basemaps
+</span><span class='line'>136K    ./Directions/maneuvers
+</span><span class='line'>196K    ./Directions
+</span><span class='line'> 52K    ./HistogramTimeSlider
+</span><span class='line'> 60K    ./popup-sprite
+</span><span class='line'>1.1M    .
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>We also removed 30 locale files which moved us from having <code>2.2 MB</code> down to <code>144 KB</code>.</p>
+
+<p>There is still some room for improvement if you&rsquo;re willing to go through <code>esri/dijit/images</code> and remove other unused images. Make sure to test your application thoroughly after using this minimal custom build, since you might have inadvertently removed some files that you may have needed. Think about what dijits you might be using and this should help you figure out which assets need to remain.</p>
+
+<p>Good Luck.</p>
+]]></content>
+  </entry>
+  
+</feed>

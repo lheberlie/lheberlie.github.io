@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Setup_install | Lloyd Heberlie]]></title>
+  <link href="http://lheberlie.github.io/blog/categories/setup-install/atom.xml" rel="self"/>
+  <link href="http://lheberlie.github.io/"/>
+  <updated>2016-01-15T16:32:49-06:00</updated>
+  <id>http://lheberlie.github.io/</id>
+  <author>
+    <name><![CDATA[Lloyd Heberlie]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress: Building Your Own User Page for GitHub]]></title>
+    <link href="http://lheberlie.github.io/blog/2014/07/31/hello-octopress/"/>
+    <updated>2014-07-31T18:37:24-05:00</updated>
+    <id>http://lheberlie.github.io/blog/2014/07/31/hello-octopress</id>
+    <content type="html"><![CDATA[<p>I initially researched <a href="https://help.github.com/articles/user-organization-and-project-pages">GitHub pages</a> back when I started writing documentation for some of my repos. For whatever reason, I decided it was too much work to just put things
+under the gh_pages branch and went with the <a href="https://help.github.com/articles/about-github-wikis">wiki feature</a> that each GitHub repo offers.</p>
+
+<p>As part of my job function I present technical workshops at our <a href="http://www.esri.com/events/devsummit">Developer&rsquo;s Summit</a> and
+<a href="http://www.esri.com/events/user-conference">User&rsquo;s</a> conferences. Part of giving a good talk is being prepared and having a good slide deck, but people also really appreciate working code samples.  Using Octopress seems to be a good fit for filling in the gap between code samples, documentation, and additional information that doesn&rsquo;t necessarily belong in the docs about
+the code samples. This post contains the information I used to get up and running, it also displays some of the nice features
+related to sharing code samples.</p>
+
+<!--more-->
+
+
+<p>FYI: Although not a requirement, it really helps if you already have experience with GitHub.</p>
+
+<p>Below are a list of the resource I used when getting started.</p>
+
+<h3>Resources</h3>
+
+<ul>
+<li><a href="http://octopress.org/docs/setup/">Octopress Setup</a></li>
+<li><a href="http://octopress.org/docs/blogging/">Blogging Basics</a></li>
+<li><a href="http://octopress.org/docs/blogging/code">Blogging Sharing Code Snippets</a>
+
+<ul>
+<li><a href="https://help.github.com/articles/about-gists">GitHub About gists</a></li>
+</ul>
+</li>
+<li><a href="http://octopress.org/docs/blogging/plugins/">Bloggging with Plugins</a></li>
+<li><a href="https://github.com/imathis/octopress/wiki/3rd-party-plugins">Octopress plugins</a>
+
+<ul>
+<li><a href="http://www.dotnetguy.co.uk/post/2012/06/25/octopress-category-list-plugin/">Category Lists</a></li>
+<li><a href="https://github.com/joet3ch/gravatar-octopress">Gravatar</a></li>
+</ul>
+</li>
+<li><a href="http://24ways.org/2013/get-started-with-github-pages/">GitHub: Get started with GitHub Pages</a></li>
+<li><a href="https://help.github.com/articles/using-jekyll-with-pages#keeping-jekyll-up-to-date">GitHub: Using Jekyll with GitHub Pages</a></li>
+<li><a href="http://thomascys.be/jekyll-grunt-setup/">Jekyll and Ruby setup</a></li>
+<li><a href="http://jekyllrb.com/docs/configuration/">Jekyll configuration docs</a></li>
+<li><a href="https://github.com/aahan/pygments-github-style/blob/master/jekyll-github.css">Pygments Github Style</a></li>
+<li><a href="http://haml.info/docs/yardoc/file.REFERENCE.html#using_haml">HTML Abstraction Markup Language (docs)</a></li>
+<li><a href="https://learn.andrewmunsell.com/learn/jekyll-by-example/tutorial">Tutorial: Jekyll by Example</a></li>
+</ul>
+
+
+<h3>Creating a new blog post</h3>
+
+<p>Creates a new blog post</p>
+
+<pre><code class="Bash Create a new post">    rake new_post["Resources: Technical Workshops"]
+</code></pre>
+
+<p>Generate &amp; Preview</p>
+
+<pre><code class="Bash">    rake generate   # Generates posts and pages into the public directory
+    rake watch      # Watches source/ and sass/ for changes and regenerates
+    rake preview    # Watches, and mounts a webserver at http://localhost:4000
+</code></pre>
+
+<p>Deploy</p>
+
+<pre><code class="Bash">    rake deploy
+</code></pre>
+
+<h3>Sharing code</h3>
+
+<p>Below is a few examples of the types of code integration that Octopress offers.<br/>
+This will be very helpful when sharing code examples that point to existing repos.</p>
+
+<h4>Hello World</h4>
+
+<pre><code class="javascript">var msg = 'Hello world!';
+</code></pre>
+
+<h4>Code Snippets (inline)</h4>
+
+<pre><code class="javascript ">
+my title http://github.com/lheberlie repo
+/*
+ * Your custom code goes here
+ */
+
+jQuery.fn.exists = function () {
+    return jQuery(this).length &gt; 0;
+};
+
+function applicationInitialize() {
+
+    var map;
+
+    require(["esri/map", "dojo/domReady!"], function (Map) {
+        map = new Map("ui-map", {
+            center: [-111.879655861, 40.571338776], // long, lat
+            sliderOrientation: "horizontal",
+            sliderPosition: "bottom-right",
+            basemap: "topo",
+            zoom: 13,
+            sliderStyle: "small"
+        });
+    });
+}
+</code></pre>
+
+<h4>Code Snippets (gists)</h4>
+
+<p><div><script src='https://gist.github.com/868758ce39e1eed3c83d.js?file=applicationInitialize.js'></script>
+<noscript><pre><code>/*
+ * Your custom code goes here
+ */
+function applicationInitialize() {
+
+    var map;
+
+    require([&quot;esri/map&quot;, &quot;dojo/domReady!&quot;], function (Map) {
+        map = new Map(&quot;ui-map&quot;, {
+            center: [-111.879655861, 40.571338776], // long, lat
+            sliderOrientation: &quot;horizontal&quot;,
+            sliderPosition: &quot;bottom-right&quot;,
+            basemap: &quot;topo&quot;,
+            zoom: 13,
+            sliderStyle: &quot;small&quot;
+        });
+    });
+}</code></pre></noscript></div>
+
+<div><script src='https://gist.github.com/40e4715506232e09a594.js?file=app.scss'></script>
+<noscript><pre><code>// ---------------------------------------------------------------------
+// CSS button to open settings (jQuery Mobile Panel)
+// ---------------------------------------------------------------------
+#ui-settings-button {
+    position:            absolute;
+    z-index:             $application-index;
+    top:                 -50px;
+    right:               -15px;
+    width:               px2em(30px);
+    height:              px2em(30px);
+    padding:             px2em(2px);
+    background-size:     px2em(25px);
+    background-repeat:   no-repeat;
+    background-position: center;
+    background-image:    url(&quot;data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3C%21--%20Generator%3A%20Adobe%20Illustrator%2017.1.0%2C%20SVG%20Export%20Plug-In%20.%20SVG%20Version%3A%206.00%20Build%200%29%20%20--%3E%0A%3C%21DOCTYPE%20svg%20PUBLIC%20%22-%2F%2FW3C%2F%2FDTD%20SVG%201.1%2F%2FEN%22%20%22http%3A%2F%2Fwww.w3.org%2FGraphics%2FSVG%2F1.1%2FDTD%2Fsvg11.dtd%22%3E%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%09%20viewBox%3D%220.04257%20-0.00098%2018%2016.95918%22%20enable-background%3D%22new%200.04257%20-0.00098%2018%2016.95918%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cpath%20id%3D%22normal%22%20fill%3D%22%2357585A%22%20d%3D%22M2.16709%2C3.20293h13.64494c0.59759%2C0%2C1.09558-0.49799%2C1.09558-1.09558%0A%09s-0.49799-1.09558-1.09558-1.09558H2.16709C1.5695%2C0.91217%2C1.07151%2C1.41016%2C1.07151%2C2.00775S1.5695%2C3.20293%2C2.16709%2C3.20293z%0A%09%20M15.91162%2C5.32674H2.16709c-0.59759%2C0-1.09558%2C0.49799-1.09558%2C1.09558S1.5695%2C7.5179%2C2.16709%2C7.5179h13.64494%0A%09c0.69719%2C0%2C1.19518-0.49799%2C1.19518-1.09558S16.50921%2C5.32674%2C15.91162%2C5.32674z%20M15.91162%2C9.57493H2.16709%0A%09c-0.59759%2C0-1.09558%2C0.49799-1.09558%2C1.09558c0%2C0.59759%2C0.49799%2C1.09558%2C1.09558%2C1.09558h13.64494%0A%09c0.59759%2C0%2C1.09558-0.49799%2C1.09558-1.09558C17.0072%2C10.07293%2C16.50921%2C9.57493%2C15.91162%2C9.57493z%20M15.94501%2C13.80961H2.20047%0A%09c-0.59759%2C0-1.09558%2C0.49799-1.09558%2C1.09558c0%2C0.59759%2C0.49799%2C1.09558%2C1.09558%2C1.09558h13.64494%0A%09c0.59759%2C0%2C1.09558-0.49799%2C1.09558-1.09558C17.04059%2C14.3076%2C16.5426%2C13.80961%2C15.94501%2C13.80961z%22%2F%3E%0A%3Cg%20id%3D%22hover%22%20display%3D%22none%22%3E%0A%09%3Cpath%20display%3D%22inline%22%20fill%3D%22%23FFFFFF%22%20d%3D%22M0.1%2C3.6h13.7c0.6%2C0%2C1.1-0.5%2C1.1-1.1s-0.5-1.1-1.1-1.1H0.1C-0.5%2C1.3-1%2C1.8-1%2C2.4%0A%09%09S-0.5%2C3.6%2C0.1%2C3.6z%20M13.9%2C5.9H0.1C-0.5%2C5.9-1%2C6.4-1%2C7s0.5%2C1.1%2C1.1%2C1.1h13.7C14.5%2C8.1%2C15%2C7.6%2C15%2C7S14.5%2C5.9%2C13.9%2C5.9z%20M13.9%2C10.4%0A%09%09H0.1c-0.6%2C0-1.1%2C0.5-1.1%2C1.1s0.5%2C1.1%2C1.1%2C1.1h13.7c0.6%2C0%2C1.1-0.5%2C1.1-1.1C15%2C10.9%2C14.5%2C10.4%2C13.9%2C10.4z%22%2F%3E%0A%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A&quot;);
+    background-color:    #fff;
+    border:              solid $ui-background-color-hover px2em(1px);
+    border-radius:       px2em(5px);
+
+    &amp;:hover {
+        background-image: url(&quot;data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3C%21--%20Generator%3A%20Adobe%20Illustrator%2017.1.0%2C%20SVG%20Export%20Plug-In%20.%20SVG%20Version%3A%206.00%20Build%200%29%20%20--%3E%0A%3C%21DOCTYPE%20svg%20PUBLIC%20%22-%2F%2FW3C%2F%2FDTD%20SVG%201.1%2F%2FEN%22%20%22http%3A%2F%2Fwww.w3.org%2FGraphics%2FSVG%2F1.1%2FDTD%2Fsvg11.dtd%22%3E%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%09%20viewBox%3D%220.04257%20-0.00098%2018%2016.95918%22%20enable-background%3D%22new%200.04257%20-0.00098%2018%2016.95918%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cpath%20id%3D%22normal%22%20display%3D%22none%22%20fill%3D%22%2357585A%22%20d%3D%22M2.16709%2C3.20293h13.64494c0.59759%2C0%2C1.09558-0.49799%2C1.09558-1.09558%0A%09s-0.49799-1.09558-1.09558-1.09558H2.16709C1.5695%2C0.91217%2C1.07151%2C1.41016%2C1.07151%2C2.00775S1.5695%2C3.20293%2C2.16709%2C3.20293z%0A%09%20M15.91162%2C5.32674H2.16709c-0.59759%2C0-1.09558%2C0.49799-1.09558%2C1.09558S1.5695%2C7.5179%2C2.16709%2C7.5179h13.64494%0A%09c0.69719%2C0%2C1.19518-0.49799%2C1.19518-1.09558S16.50921%2C5.32674%2C15.91162%2C5.32674z%20M15.91162%2C9.57493H2.16709%0A%09c-0.59759%2C0-1.09558%2C0.49799-1.09558%2C1.09558c0%2C0.59759%2C0.49799%2C1.09558%2C1.09558%2C1.09558h13.64494%0A%09c0.59759%2C0%2C1.09558-0.49799%2C1.09558-1.09558C17.0072%2C10.07293%2C16.50921%2C9.57493%2C15.91162%2C9.57493z%20M15.94501%2C13.80961H2.20047%0A%09c-0.59759%2C0-1.09558%2C0.49799-1.09558%2C1.09558c0%2C0.59759%2C0.49799%2C1.09558%2C1.09558%2C1.09558h13.64494%0A%09c0.59759%2C0%2C1.09558-0.49799%2C1.09558-1.09558C17.04059%2C14.3076%2C16.5426%2C13.80961%2C15.94501%2C13.80961z%22%2F%3E%0A%3Cpath%20id%3D%22hover%22%20fill%3D%22%23FFFFFF%22%20d%3D%22M2.16709%2C3.20293h13.64494c0.59759%2C0%2C1.09558-0.49799%2C1.09558-1.09558%0A%09s-0.49799-1.09558-1.09558-1.09558H2.16709C1.5695%2C0.91217%2C1.07151%2C1.41016%2C1.07151%2C2.00775S1.5695%2C3.20293%2C2.16709%2C3.20293z%0A%09%20M15.91162%2C5.32674H2.16709c-0.59759%2C0-1.09558%2C0.49799-1.09558%2C1.09558S1.5695%2C7.5179%2C2.16709%2C7.5179h13.64494%0A%09c0.69719%2C0%2C1.19518-0.49799%2C1.19518-1.09558S16.50921%2C5.32674%2C15.91162%2C5.32674z%20M15.91162%2C9.57493H2.16709%0A%09c-0.59759%2C0-1.09558%2C0.49799-1.09558%2C1.09558c0%2C0.59759%2C0.49799%2C1.09558%2C1.09558%2C1.09558h13.64494%0A%09c0.59759%2C0%2C1.09558-0.49799%2C1.09558-1.09558C17.0072%2C10.07293%2C16.50921%2C9.57493%2C15.91162%2C9.57493z%20M15.94501%2C13.80961H2.20047%0A%09c-0.59759%2C0-1.09558%2C0.49799-1.09558%2C1.09558c0%2C0.59759%2C0.49799%2C1.09558%2C1.09558%2C1.09558h13.64494%0A%09c0.59759%2C0%2C1.09558-0.49799%2C1.09558-1.09558C17.04059%2C14.3076%2C16.5426%2C13.80961%2C15.94501%2C13.80961z%22%2F%3E%0A%3C%2Fsvg%3E%0A&quot;);
+        background-color: $ui-background-color-hover;
+    }
+}</code></pre></noscript></div>
+</p>
+
+<h4>Code Snippets (local)</h4>
+
+<p><figure class='code'><figcaption><span> (_license.scss)</span> <a href='/downloads/code/_license.scss'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="c1">// -----------------------------------------------------------</span>
+</span><span class='line'><span class="c1">// Licensing header for stylesheets</span>
+</span><span class='line'><span class="c1">// -----------------------------------------------------------</span>
+</span><span class='line'><span class="nv">$copyright-year</span><span class="o">:</span> <span class="mi">2014</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$author</span><span class="o">:</span> <span class="n">Lloyd</span> <span class="n">Heberlie</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$license</span><span class="o">:</span> <span class="n">Apache</span> <span class="mi">2</span><span class="mf">.0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$compass-version</span><span class="o">:</span> <span class="s2">&quot;0.12.6&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$sass-version</span><span class="o">:</span> <span class="s2">&quot;3.2.19&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*!</span>
+</span><span class='line'><span class="cm"> * Copyright © #{$copyright-year}, #{$author}</span>
+</span><span class='line'><span class="cm"> * License: #{$license}</span>
+</span><span class='line'><span class="cm"> * Generated with Compass version: #{$compass-version} and Sass version: #{$sass-version}</span>
+</span><span class='line'><span class="cm">*/</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h4>Code Snippets (Inline code blocks)</h4>
+
+<p><figure class='code'><figcaption><span>Python Dictionary </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">example</span> <span class="n">of</span> <span class="n">extracting</span> <span class="n">a</span> <span class="n">subset</span> <span class="kn">from</span> <span class="nn">a</span> <span class="nn">dictionary</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">prices</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>   <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">ACME</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;:</span> <span class="mf">45.23</span><span class="p">,</span>
+</span><span class='line'>   <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">AAPL</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;:</span> <span class="mf">612.78</span><span class="p">,</span>
+</span><span class='line'>   <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">IBM</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;:</span> <span class="mf">205.55</span><span class="p">,</span>
+</span><span class='line'>   <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">HPQ</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;:</span> <span class="mf">37.20</span><span class="p">,</span>
+</span><span class='line'>   <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">FB</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;:</span> <span class="mf">10.75</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">Make</span> <span class="n">a</span> <span class="n">dictionary</span> <span class="n">of</span> <span class="nb">all</span> <span class="n">prices</span> <span class="n">over</span> <span class="mi">200</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">p1</span> <span class="o">=</span> <span class="p">{</span> <span class="n">key</span><span class="p">:</span><span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">prices</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">200</span> <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">print</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">All</span> <span class="n">prices</span> <span class="n">over</span> <span class="mi">200</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span>
+</span><span class='line'><span class="n">pprint</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">Make</span> <span class="n">a</span> <span class="n">dictionary</span> <span class="n">of</span> <span class="n">tech</span> <span class="n">stocks</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">tech_names</span> <span class="o">=</span> <span class="p">{</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">AAPL</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">IBM</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">HPQ</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">MSFT</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="n">p2</span> <span class="o">=</span> <span class="p">{</span> <span class="n">key</span><span class="p">:</span><span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">value</span> <span class="ow">in</span> <span class="n">prices</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">tech_names</span> <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">print</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">All</span> <span class="n">techs</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span>
+</span><span class='line'><span class="n">pprint</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h4>Image Tags</h4>
+
+<p>I
+<img src="/images/rss.png"></p>
+
+<p><img src="/blog/images/Octocat.png"></p>
+]]></content>
+  </entry>
+  
+</feed>
