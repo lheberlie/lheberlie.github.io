@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Web_optimization | Lloyd Heberlie]]></title>
   <link href="http://lheberlie.github.io/blog/categories/web-optimization/atom.xml" rel="self"/>
   <link href="http://lheberlie.github.io/"/>
-  <updated>2016-01-19T09:27:05-06:00</updated>
+  <updated>2016-01-19T09:33:32-06:00</updated>
   <id>http://lheberlie.github.io/</id>
   <author>
     <name><![CDATA[Lloyd Heberlie]]></name>
@@ -33,6 +33,9 @@
 <p><strong>Use the Web Optimizer</strong></p>
 
 <p>You will need to use the Web Optimizer to create a custom build of the ArcGIS API for JavaScript. If you have never completed this task before, you might want to read the <a href="http://jso.arcgis.com/help">Web Optimizer help</a>.</p>
+
+<!-- more -->
+
 
 <p>The following instructions assume the &ldquo;Only include built layer files and resources&rdquo; option was checked (see graphic below) when generating a build.</p>
 
